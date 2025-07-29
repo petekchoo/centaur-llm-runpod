@@ -1,19 +1,12 @@
-import logging
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from runpod.serverless.utils.rp_validator import validate
 from runpod.serverless.handler import runpod_handler
 
 # ─────────────────────────────────────
-# Setup logging
-# ─────────────────────────────────────
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-# ─────────────────────────────────────
 # Load model at cold start
 # ─────────────────────────────────────
-logger.info("Loading tokenizer and model...")
+print("Loading tokenizer and model...")
 
 model_id = "myshell-ai/Centaur-7B"
 try:
@@ -23,9 +16,9 @@ try:
         torch_dtype=torch.float16,
         device_map="auto"
     )
-    logger.info("Model and tokenizer loaded successfully.")
+    print("✅ Model and tokenizer loaded successfully.")
 except Exception as e:
-    logger.exception("Error loading model/tokenizer:")
+    print("❌ Error loading model/tokenizer:", str(e))
     raise e
 
 # ─────────────────────────────────────
@@ -34,14 +27,14 @@ except Exception as e:
 @validate
 def handler(event):
     try:
-        logger.info(f"Received event: {event}")
+        print(f"📩 Received event: {event}")
 
         prompt = event["input"].get("prompt")
         if not prompt:
             return {"error": "Missing 'prompt' in input"}
 
         inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
-        logger.info("Input tokenized and moved to model device.")
+        print("✍️  Input tokenized and moved to device.")
 
         outputs = model.generate(
             **inputs,
@@ -50,13 +43,13 @@ def handler(event):
             temperature=0.7,
             top_p=0.95
         )
-        result = tokenizer.decode(outputs[0], skip_special_tokens=True)
-        logger.info("Generation complete.")
+        print("🧠 Generation complete.")
 
+        result = tokenizer.decode(outputs[0], skip_special_tokens=True)
         return {"output": result}
 
     except Exception as e:
-        logger.exception("Error during inference:")
+        print("❌ Error during inference:", str(e))
         return {"error": str(e)}
 
 # ─────────────────────────────────────
