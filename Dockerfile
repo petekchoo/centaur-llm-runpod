@@ -14,4 +14,4 @@ COPY handler.py .
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # RunPod expects this command
-CMD ["python3", "-m", "runpod"]
+CMD ["runpod"]
