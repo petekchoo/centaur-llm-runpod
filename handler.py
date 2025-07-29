@@ -27,3 +27,6 @@ def handler(event):
     )
     result = tokenizer.decode(outputs[0], skip_special_tokens=True)
     return {"output": result}
+
+from runpod.serverless.handler import runpod_handler
+runpod_handler(handler)
