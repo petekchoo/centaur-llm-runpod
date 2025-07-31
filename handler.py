@@ -1,3 +1,6 @@
+import os
+os.environ["HF_HOME"] = "/workspace/hf_cache"
+
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
 
