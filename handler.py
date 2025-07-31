@@ -11,6 +11,7 @@ model = AutoModelForCausalLM.from_pretrained(
     model_id,
     torch_dtype=torch.float16,
     device_map="auto"
+    trust_remote_code=True
 )
 print("✅ Model loaded.")
 
