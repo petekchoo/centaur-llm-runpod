@@ -3,3 +3,4 @@ transformers==4.40.0
 accelerate
 unsloth
 bitsandbytes
+numpy==1.26.4
