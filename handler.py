@@ -3,7 +3,7 @@ import torch
 
 print("🐍 handler.py started")
 
-base_model = "meta-llama/Llama-2-70b-hf"
+base_model = "kaiokendev/llama-2-70b"
 adapter_name = "marcelbinz/Llama-3.1-Centaur-70B-adapter"
 
 print("🚀 Loading base + adapter")
