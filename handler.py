@@ -10,8 +10,8 @@ print("🚀 Loading model from:", model_id)
 model, tokenizer = FastLanguageModel.from_pretrained(
     model_name = model_id,
     max_seq_length = 32768,
-    dtype = torch.bfloat16,      # or torch.float16 if needed
-    load_in_4bit = True,
+    dtype = torch.bfloat16,
+    load_in_4bit = False   # ← disables 4-bit & Triton/bitsandbytes
 )
 
 FastLanguageModel.for_inference(model)  # Prepare for generation
