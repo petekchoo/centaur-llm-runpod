@@ -3,7 +3,7 @@ import torch
 
 print("🐍 handler.py started")
 
-model_id = "myshell-ai/Centaur-7B"
+model_id = "marcelbinz/Llama-3.1-Centaur-70B"
 
 print("Loading model...")
 tokenizer = AutoTokenizer.from_pretrained(model_id)
