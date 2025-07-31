@@ -2,3 +2,4 @@ torch==2.2.1
 transformers==4.40.0
 accelerate
 unsloth
+bitsandbytes
