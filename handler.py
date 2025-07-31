@@ -3,19 +3,22 @@ import torch
 
 print("🐍 handler.py started")
 
-model_id = "marcelbinz/Llama-3.1-Centaur-70B-adapter"
+base_model = "meta-llama/Llama-2-70b-hf"
+adapter_name = "marcelbinz/Llama-3.1-Centaur-70B-adapter"
 
-# Load tokenizer + model using Unsloth
-print("🚀 Loading model from:", model_id)
+print("🚀 Loading base + adapter")
+
 model, tokenizer = FastLanguageModel.from_pretrained(
-    model_name = model_id,
+    model_name = base_model,
+    adapter_name = adapter_name,
     max_seq_length = 32768,
-    dtype = torch.bfloat16,
-    load_in_4bit = False   # ← disables 4-bit & Triton/bitsandbytes
+    dtype = torch.bfloat16,     # or float16
+    load_in_4bit = True,
 )
 
-FastLanguageModel.for_inference(model)  # Prepare for generation
-print("✅ Model loaded and ready.")
+FastLanguageModel.for_inference(model)
+
+print("✅ Centaur adapter loaded on top of base model")
 
 def generate(prompt: str):
     inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
@@ -28,9 +31,7 @@ def generate(prompt: str):
     )
     return tokenizer.decode(outputs[0], skip_special_tokens=True)
 
-# Test
 if __name__ == "__main__":
     prompt = "Explain how gravity works in space."
     print("📝 Prompt:", prompt)
-    output = generate(prompt)
-    print("🧠 Output:", output)
+    print("🧠 Output:", generate(prompt))
