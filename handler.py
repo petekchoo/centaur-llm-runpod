@@ -1,34 +1,36 @@
-from transformers import AutoTokenizer, AutoModelForCausalLM
+from unsloth import FastLanguageModel
 import torch
 
 print("🐍 handler.py started")
 
-model_id = "marcelbinz/Llama-3.1-Centaur-70B"
+model_id = "marcelbinz/Llama-3.1-Centaur-70B-adapter"
 
-print("Loading model...")
-tokenizer = AutoTokenizer.from_pretrained(model_id)
-model = AutoModelForCausalLM.from_pretrained(
-    model_id,
-    torch_dtype=torch.float16,
-    device_map="auto",
-    trust_remote_code=True
+# Load tokenizer + model using Unsloth
+print("🚀 Loading model from:", model_id)
+model, tokenizer = FastLanguageModel.from_pretrained(
+    model_name = model_id,
+    max_seq_length = 32768,
+    dtype = torch.bfloat16,      # or torch.float16 if needed
+    load_in_4bit = True,
 )
-print("✅ Model loaded.")
 
-def generate(prompt):
+FastLanguageModel.for_inference(model)  # Prepare for generation
+print("✅ Model loaded and ready.")
+
+def generate(prompt: str):
     inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
     outputs = model.generate(
         **inputs,
-        max_new_tokens=100,
-        do_sample=True,
+        max_new_tokens=256,
         temperature=0.7,
-        top_p=0.95
+        top_p=0.95,
+        do_sample=True
     )
     return tokenizer.decode(outputs[0], skip_special_tokens=True)
 
-# Test run
+# Test
 if __name__ == "__main__":
-    prompt = "Tell me a short story about a space explorer."
+    prompt = "Explain how gravity works in space."
     print("📝 Prompt:", prompt)
     output = generate(prompt)
     print("🧠 Output:", output)
