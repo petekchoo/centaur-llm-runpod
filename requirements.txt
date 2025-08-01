@@ -1,6 +1,16 @@
-torch==2.2.1
-transformers==4.40.0
-accelerate
-numpy==1.26.4
-bitsandbytes
-xformers
+# Core compatibility stack
+torch==2.1.2+cu118          # ✅ Prebuilt with CUDA 11.8 support
+torchvision==0.16.2+cu118   # Optional but matched
+torchaudio==2.1.2+cu118     # Optional but matched
+--extra-index-url https://download.pytorch.org/whl/cu118
+
+# Transformers and tokenizer stack
+transformers>=4.39.0
+tokenizers>=0.15.0
+safetensors>=0.4.0          # ✅ Faster, safer model loading
+sentencepiece               # ✅ For LLaMA/tokenizer variants (e.g., Centaur)
+accelerate>=0.25.0          # Optional, for multi-GPU or sharded loads
+
+# Jupyter (if needed)
+ipykernel
+jupyterlab
