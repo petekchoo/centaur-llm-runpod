@@ -26,10 +26,10 @@ def generate(prompt: str):
     start = time.time()
     outputs = model.generate(
         **inputs,
-        max_new_tokens=128,
+        max_new_tokens=64,
         temperature=0.7,
         top_p=0.95,
-        do_sample=True
+        do_sample=False
     )
     end = time.time()
     print(f"⏱️ Generation took {end - start:.2f} seconds")
