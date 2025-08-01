@@ -1,21 +1,17 @@
-import os
-os.environ["HF_HOME"] = "/workspace/hf_cache"
-
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
 
 print("🐍 handler.py started")
 
-model_id = "marcelbinz/Llama-3.1-Centaur-70B"
+model_path = "/root/centaur_model"  # ✅ local path, not HF repo name
 
-print(f"🚀 Loading model: {model_id}")
+print(f"🚀 Loading model from: {model_path}")
 
-tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)
+tokenizer = AutoTokenizer.from_pretrained(model_path)
 model = AutoModelForCausalLM.from_pretrained(
-    model_id,
-    torch_dtype=torch.bfloat16,     # or torch.float16 if needed
-    device_map="auto",
-    trust_remote_code=True
+    model_path,
+    torch_dtype=torch.bfloat16,
+    device_map="auto"
 )
 
 print("✅ Model loaded and ready.")
@@ -32,6 +28,6 @@ def generate(prompt: str):
     return tokenizer.decode(outputs[0], skip_special_tokens=True)
 
 if __name__ == "__main__":
-    prompt = "Explain how memory works in the human brain."
+    prompt = "What does it mean to think like a human?"
     print("📝 Prompt:", prompt)
     print("🧠 Output:", generate(prompt))
